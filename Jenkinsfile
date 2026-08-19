@@ -31,6 +31,17 @@ pipeline {
     }
 
     stages {
+        stage('Setup') {
+            steps {
+                echo '⚙️ 设置构建环境...'
+                sh '''
+                    # 生成 local.properties (指向用户的 Android SDK)
+                    echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
+                    cat local.properties
+                '''
+            }
+        }
+
         stage('Checkout') {
             steps {
                 echo '📥 检出代码...'
@@ -56,7 +67,7 @@ pipeline {
 
         stage('Environment Setup') {
             steps {
-                echo '⚙️ 环境检查...'
+                echo '🔍 环境检查...'
                 sh """
                     echo "JDK 版本:"
                     java -version
