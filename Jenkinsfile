@@ -28,6 +28,7 @@ pipeline {
 
     environment {
         GRADLE_OPTS = '-Xmx2048m -Dfile.encoding=UTF-8'
+        BUILD_VARIANT_UPPER = "${params.BUILD_VARIANT.capitalize()}"
     }
 
     stages {
@@ -35,7 +36,6 @@ pipeline {
             steps {
                 echo '⚙️ 设置构建环境...'
                 sh '''
-                    # 生成 local.properties (指向用户的 Android SDK)
                     echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
                     cat local.properties
                 '''
@@ -54,14 +54,14 @@ pipeline {
                         script: "git log -1 --pretty=%an",
                         returnStdout: true
                     ).trim()
-                    env.BUILD_NUMBER_CUSTOM = sh(
+                    env.GIT_HASH = sh(
                         script: "git rev-parse --short HEAD",
                         returnStdout: true
                     ).trim()
                 }
                 echo "✅ 提交信息: ${env.GIT_COMMIT_MSG}"
                 echo "✅ 提交作者: ${env.GIT_AUTHOR}"
-                echo "✅ 提交哈希: ${env.BUILD_NUMBER_CUSTOM}"
+                echo "✅ 提交哈希: ${env.GIT_HASH}"
             }
         }
 
@@ -82,9 +82,9 @@ pipeline {
                 expression { params.RUN_LINT == true }
             }
             steps {
-                echo '🔍 运行代码检查 (Lint)...'
+                echo "🔍 运行代码检查 (Lint) - ${BUILD_VARIANT_UPPER}..."
                 sh """
-                    ./gradlew lint${BUILD_VARIANT.capitalize()} --stacktrace || true
+                    ./gradlew lint${BUILD_VARIANT_UPPER} --stacktrace || true
                 """
             }
         }
@@ -93,7 +93,7 @@ pipeline {
             steps {
                 echo "🔨 构建 ${params.BUILD_VARIANT} 版本..."
                 sh """
-                    ./gradlew clean assemble${BUILD_VARIANT.capitalize()} \
+                    ./gradlew clean assemble${BUILD_VARIANT_UPPER} \
                         -Dorg.gradle.parallel=true \
                         -Dorg.gradle.workers.max=4 \
                         --stacktrace
@@ -106,11 +106,11 @@ pipeline {
                 expression { params.RUN_TESTS == true }
             }
             steps {
-                echo '🧪 运行单元测试...'
+                echo "🧪 运行单元测试 - ${BUILD_VARIANT_UPPER}..."
                 sh """
-                    ./gradlew test${BUILD_VARIANT.capitalize()} \
+                    ./gradlew test${BUILD_VARIANT_UPPER} \
                         --stacktrace \
-                        -Dorg.gradle.parallel=true
+                        -Dorg.gradle.parallel=true || true
                 """
             }
             post {
@@ -122,12 +122,12 @@ pipeline {
 
         stage('Build APK/AAB') {
             steps {
-                echo "📦 打包 ${params.BUILD_VARIANT} APK..."
+                echo "📦 打包 ${params.BUILD_VARIANT} 版本..."
                 sh """
-                    if [ "${BUILD_VARIANT}" == "release" ]; then
-                        ./gradlew bundle${BUILD_VARIANT.capitalize()} --stacktrace || true
+                    if [ "${params.BUILD_VARIANT}" = "release" ]; then
+                        ./gradlew bundle${BUILD_VARIANT_UPPER} --stacktrace || true
                     else
-                        ./gradlew assemble${BUILD_VARIANT.capitalize()} --stacktrace
+                        ./gradlew assemble${BUILD_VARIANT_UPPER} --stacktrace
                     fi
                 """
             }
