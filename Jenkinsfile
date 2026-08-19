@@ -43,21 +43,18 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '📥 检出代码...'
-                sh '''
-                    cd /Users/willguo/projects/architecture-samples
-                '''
                 script {
                     // 获取 Git 信息
                     env.GIT_COMMIT_MSG = sh(
-                        script: "cd /Users/willguo/projects/architecture-samples && git log -1 --pretty=%B",
+                        script: "git log -1 --pretty=%B",
                         returnStdout: true
                     ).trim()
                     env.GIT_AUTHOR = sh(
-                        script: "cd /Users/willguo/projects/architecture-samples && git log -1 --pretty=%an",
+                        script: "git log -1 --pretty=%an",
                         returnStdout: true
                     ).trim()
                     env.BUILD_NUMBER_CUSTOM = sh(
-                        script: "cd /Users/willguo/projects/architecture-samples && git rev-parse --short HEAD",
+                        script: "git rev-parse --short HEAD",
                         returnStdout: true
                     ).trim()
                 }
@@ -87,10 +84,7 @@ pipeline {
             }
             steps {
                 echo '🔍 运行代码检查 (Lint)...'
-                sh '''
-                    cd /Users/willguo/projects/architecture-samples
-                    ./gradlew lint${BUILD_VARIANT.capitalize()} --stacktrace || true
-                '''
+                sh './gradlew lint${BUILD_VARIANT.capitalize()} --stacktrace || true'
                 // 收集 lint 报告
                 androidLint canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/lint-results*.xml', unHealthy: '', unstableThreshold: '0'
             }
@@ -100,7 +94,6 @@ pipeline {
             steps {
                 echo "🔨 构建 ${params.BUILD_VARIANT} 版本..."
                 sh '''
-                    cd /Users/willguo/projects/architecture-samples
                     ./gradlew clean assemble${BUILD_VARIANT.capitalize()} \
                         -Dorg.gradle.parallel=true \
                         -Dorg.gradle.workers.max=4 \
@@ -116,7 +109,6 @@ pipeline {
             steps {
                 echo '🧪 运行单元测试...'
                 sh '''
-                    cd /Users/willguo/projects/architecture-samples
                     ./gradlew test${BUILD_VARIANT.capitalize()} \
                         --stacktrace \
                         -Dorg.gradle.parallel=true
@@ -140,7 +132,6 @@ pipeline {
             steps {
                 echo "📦 打包 ${params.BUILD_VARIANT} APK..."
                 sh '''
-                    cd /Users/willguo/projects/architecture-samples
                     if [ "${BUILD_VARIANT}" == "release" ]; then
                         # Release 构建需要签名配置
                         echo "⚠️ Release 构建需要配置签名密钥"
@@ -157,7 +148,6 @@ pipeline {
             steps {
                 echo '📊 生成分析报告...'
                 sh '''
-                    cd /Users/willguo/projects/architecture-samples
                     # 生成构建报告
                     ./gradlew projectReport --stacktrace || true
                     
