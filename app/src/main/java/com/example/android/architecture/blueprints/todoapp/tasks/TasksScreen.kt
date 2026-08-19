@@ -32,6 +32,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -227,121 +228,121 @@ private fun TasksEmptyContent(
     }
 }
 
-@Preview
-@Composable
-private fun TasksContentPreview() {
-    MaterialTheme {
-        Surface {
-            TasksContent(
-                loading = false,
-                tasks = listOf(
-                    Task(
-                        title = "Title 1",
-                        description = "Description 1",
-                        isCompleted = false,
-                        id = "ID 1"
-                    ),
-                    Task(
-                        title = "Title 2",
-                        description = "Description 2",
-                        isCompleted = true,
-                        id = "ID 2"
-                    ),
-                    Task(
-                        title = "Title 3",
-                        description = "Description 3",
-                        isCompleted = true,
-                        id = "ID 3"
-                    ),
-                    Task(
-                        title = "Title 4",
-                        description = "Description 4",
-                        isCompleted = false,
-                        id = "ID 4"
-                    ),
-                    Task(
-                        title = "Title 5",
-                        description = "Description 5",
-                        isCompleted = true,
-                        id = "ID 5"
-                    ),
-                ),
-                currentFilteringLabel = R.string.label_all,
-                noTasksLabel = R.string.no_tasks_all,
-                noTasksIconRes = R.drawable.logo_no_fill,
-                onRefresh = { },
-                onTaskClick = { },
-                onTaskCheckedChange = { _, _ -> },
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TasksContentEmptyPreview() {
-    MaterialTheme {
-        Surface {
-            TasksContent(
-                loading = false,
-                tasks = emptyList(),
-                currentFilteringLabel = R.string.label_all,
-                noTasksLabel = R.string.no_tasks_all,
-                noTasksIconRes = R.drawable.logo_no_fill,
-                onRefresh = { },
-                onTaskClick = { },
-                onTaskCheckedChange = { _, _ -> },
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TasksEmptyContentPreview() {
-    TodoTheme {
-        Surface {
-            TasksEmptyContent(
-                noTasksLabel = R.string.no_tasks_all,
-                noTasksIconRes = R.drawable.logo_no_fill
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TaskItemPreview() {
-    MaterialTheme {
-        Surface {
-            TaskItem(
-                task = Task(
-                    title = "Title",
-                    description = "Description",
-                    id = "ID"
-                ),
-                onTaskClick = { },
-                onCheckedChange = { }
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun TaskItemCompletedPreview() {
-    MaterialTheme {
-        Surface {
-            TaskItem(
-                task = Task(
-                    title = "Title",
-                    description = "Description",
-                    isCompleted = true,
-                    id = "ID"
-                ),
-                onTaskClick = { },
-                onCheckedChange = { }
-            )
-        }
-    }
-}
+//@Preview
+//@Composable
+//private fun TasksContentPreview() {
+//    MaterialTheme {
+//        Surface {
+//            TasksContent(
+//                loading = false,
+//                tasks = listOf(
+//                    Task(
+//                        title = "Title 1",
+//                        description = "Description 1",
+//                        isCompleted = false,
+//                        id = "ID 1"
+//                    ),
+//                    Task(
+//                        title = "Title 2",
+//                        description = "Description 2",
+//                        isCompleted = true,
+//                        id = "ID 2"
+//                    ),
+//                    Task(
+//                        title = "Title 3",
+//                        description = "Description 3",
+//                        isCompleted = true,
+//                        id = "ID 3"
+//                    ),
+//                    Task(
+//                        title = "Title 4",
+//                        description = "Description 4",
+//                        isCompleted = false,
+//                        id = "ID 4"
+//                    ),
+//                    Task(
+//                        title = "Title 5",
+//                        description = "Description 5",
+//                        isCompleted = true,
+//                        id = "ID 5"
+//                    ),
+//                ),
+//                currentFilteringLabel = R.string.label_all,
+//                noTasksLabel = R.string.no_tasks_all,
+//                noTasksIconRes = R.drawable.logo_no_fill,
+//                onRefresh = { },
+//                onTaskClick = { },
+//                onTaskCheckedChange = { _, _ -> },
+//            )
+//        }
+//    }
+//}
+//
+//@Preview
+//@Composable
+//private fun TasksContentEmptyPreview() {
+//    MaterialTheme {
+//        Surface {
+//            TasksContent(
+//                loading = false,
+//                tasks = emptyList(),
+//                currentFilteringLabel = R.string.label_all,
+//                noTasksLabel = R.string.no_tasks_all,
+//                noTasksIconRes = R.drawable.logo_no_fill,
+//                onRefresh = { },
+//                onTaskClick = { },
+//                onTaskCheckedChange = { _, _ -> },
+//            )
+//        }
+//    }
+//}
+//
+//@Preview
+//@Composable
+//private fun TasksEmptyContentPreview() {
+//    TodoTheme {
+//        Surface {
+//            TasksEmptyContent(
+//                noTasksLabel = R.string.no_tasks_all,
+//                noTasksIconRes = R.drawable.logo_no_fill
+//            )
+//        }
+//    }
+//}
+//
+//@Preview
+//@Composable
+//private fun TaskItemPreview() {
+//    MaterialTheme {
+//        Surface {
+//            TaskItem(
+//                task = Task(
+//                    title = "Title",
+//                    description = "Description",
+//                    id = "ID"
+//                ),
+//                onTaskClick = { },
+//                onCheckedChange = { }
+//            )
+//        }
+//    }
+//}
+//
+//@Preview
+//@Composable
+//private fun TaskItemCompletedPreview() {
+//    MaterialTheme {
+//        Surface {
+//            TaskItem(
+//                task = Task(
+//                    title = "Title",
+//                    description = "Description",
+//                    isCompleted = true,
+//                    id = "ID"
+//                ),
+//                onTaskClick = { },
+//                onCheckedChange = { }
+//            )
+//        }
+//    }
+//}
