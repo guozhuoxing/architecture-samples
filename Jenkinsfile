@@ -155,7 +155,7 @@ pipeline {
                 def buildEndTime = System.currentTimeMillis()
                 def buildStartTime = env.BUILD_START_TIME.toLong()
                 def totalDuration = buildEndTime - buildStartTime
-                def totalSeconds = totalDuration / 1000
+                def totalSeconds = totalDuration.intdiv(1000)
                 def minutes = totalSeconds.intdiv(60)
                 def seconds = totalSeconds % 60
                 def completionTime = new Date().format('yyyy-MM-dd HH:mm:ss')
@@ -163,7 +163,7 @@ pipeline {
                 echo "=========================================="
                 echo "✅ 构建完成统计"
                 echo "=========================================="
-                echo "⏱️  总耗时: ${minutes}分 ${seconds.toInteger()}秒 (${totalDuration}ms)"
+                echo "⏱️  总耗时: ${minutes}分 ${seconds}秒 (${totalDuration}ms)"
                 echo "📅 完成时间: ${completionTime}"
                 echo "=========================================="
             }
