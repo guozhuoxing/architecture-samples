@@ -29,6 +29,7 @@ pipeline {
     environment {
         GRADLE_OPTS = '-Xmx2048m -Dfile.encoding=UTF-8'
         BUILD_VARIANT_UPPER = "${params.BUILD_VARIANT.capitalize()}"
+        BUILD_START_TIME = "${System.currentTimeMillis()}"
     }
 
     stages {
@@ -149,6 +150,22 @@ pipeline {
         always {
             echo '🧹 清理工作...'
             sh 'echo "构建完成于: $(date)" > build.log'
+            
+            script {
+                def buildEndTime = System.currentTimeMillis()
+                def buildStartTime = env.BUILD_START_TIME.toLong()
+                def totalDuration = buildEndTime - buildStartTime
+                def totalSeconds = totalDuration / 1000
+                def minutes = totalSeconds.intdiv(60)
+                def seconds = totalSeconds % 60
+                
+                echo "=========================================="
+                echo "✅ 构建完成统计"
+                echo "=========================================="
+                echo "⏱️  总耗时: ${minutes}分 ${seconds.toInteger()}秒 (${totalDuration}ms)"
+                echo "📅 完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+                echo "=========================================="
+            }
             
             script {
                 try {
