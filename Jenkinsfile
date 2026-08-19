@@ -158,12 +158,13 @@ pipeline {
                 def totalSeconds = totalDuration / 1000
                 def minutes = totalSeconds.intdiv(60)
                 def seconds = totalSeconds % 60
+                def completionTime = new Date().format('yyyy-MM-dd HH:mm:ss')
                 
                 echo "=========================================="
                 echo "✅ 构建完成统计"
                 echo "=========================================="
                 echo "⏱️  总耗时: ${minutes}分 ${seconds.toInteger()}秒 (${totalDuration}ms)"
-                echo "📅 完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+                echo "📅 完成时间: ${completionTime}"
                 echo "=========================================="
             }
             
